@@ -6,10 +6,10 @@ class expense:
         self.time= time
         self.payment_method = payment_method
     def __str__(self):
-        return f"{self.date}, {self.time}, {self.category}, {self.payment_method}"
+        return f"{self.date}, {self.time}| {self.category}|{self.amount}| {self.payment_method}"
 class cardExpense(expense):
-    def payment_method(self):
+    def process_payment(self):
         print("payment successful")
-class category():
+class category:
     def __init__(self, name):
         self.name = name
