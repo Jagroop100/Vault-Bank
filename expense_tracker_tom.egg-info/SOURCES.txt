@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+setup.py
+expense_tracker_tom.egg-info/PKG-INFO
+expense_tracker_tom.egg-info/SOURCES.txt
+expense_tracker_tom.egg-info/dependency_links.txt
+expense_tracker_tom.egg-info/top_level.txt

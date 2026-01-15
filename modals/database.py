@@ -15,7 +15,6 @@ def create_table():
             type TEXT
         )
     """)
-    
 def clear_transactions():
     conn = connect_db
     cur = conn.cursor()

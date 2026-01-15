@@ -32,7 +32,4 @@ class CardExpense(expense):
         return ("Payment successful with card")
 class CashExpense(expense):
     def process_payment(self):
-        return ("Payment successful with cash")
-
-
-        
+        return ("Payment successful with cash")      

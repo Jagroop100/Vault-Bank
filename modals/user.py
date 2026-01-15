@@ -59,3 +59,17 @@ class User:
         rows = cur.fetchall()
         conn.close()
         return rows
+import json
+
+def save_expenses(self):
+    with open("expenses.json", "w") as f:
+        json.dump([e.to_dict() for e in self.session_expenses], f, indent=4)
+
+def load_expenses(self):
+    try:
+        with open("expenses.json", "r") as f:
+            data = json.load(f)
+            for e in data:
+                self.session_expenses.append(expense.from_dict(e))
+    except FileNotFoundError:
+        pass

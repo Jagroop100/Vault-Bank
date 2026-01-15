@@ -16,7 +16,6 @@ class BankAccount:
             return ("Insufficient funds")
         if self.balance<=0 or amount>self.balance:
             return self.insufficient_balance()
-            
         self.balance -= amount
         
         return(
