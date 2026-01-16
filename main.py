@@ -1,69 +1,94 @@
+import streamlit as st
 from modals.bank import BankAccount
-from modals.expenses import expense, CardExpense, CashExpense
+from modals.expenses import CardExpense, CashExpense
 from modals.user import User
 from modals.database import create_table
 from datetime import datetime
-def show_menu():
-    print("\n===== EXPENSE TRACKER =====")
-    print("1. Add Card Expense")
-    print("2. Add Cash Expense")
-    print("3. View Expenses")
-    print("4. View Transaction History")
-    print("5. View Total Expense")
-    print("0. Exit")
-
-
-def main():
-    create_table()
-
+st.set_page_config(page_title="Expense Tracker", layout="centered")
+create_table()
+if "user" not in st.session_state:
     account = BankAccount("Tom", "DE5089787998678700", 2004)
     user = User("Tom", account)
     user.load_expenses()
+    st.session_state.user = user
+user = st.session_state.user
 
-    while True:
-        show_menu()
-        choice = input("Enter your choice: ")
+st.title("Expense Tracker")
 
-        if choice == "1" or choice == "2":
-            amount = float(input("Enter amount: "))
-            category = input("Enter category: ")
+menu = st.sidebar.selectbox(
+    "Menu",
+    [
+        "Add Card Expense",
+        "Add Cash Expense",
+        "View Expenses",
+        "Transaction History",
+        "Total Expense",
+    ],
+)
 
-            now = datetime.now()
-            date = now.strftime("%Y-%m-%d")
-            time = now.strftime("%H:%M:%S")
+if menu == "Add Card Expense":
+    st.subheader("Add Card Expense")
 
-            if choice == "1":
-                expense = CardExpense(amount, category, date, time)
-            else:
-                expense = CashExpense(amount, category, date, time)
+    amount = st.number_input("Amount", min_value=0.0, step=1.0)
+    category = st.text_input("Category")
 
-            if user.new_expense(expense):
-                print(expense.process_payment())
-                user.save_expense_to_db(expense)
-                user.save_expenses()
-            else:
-                print("Insufficient balance.")
+    if st.button("Add Card Expense"):
+        now = datetime.now()
+        expense = CardExpense(
+            amount,
+            category,
+            now.strftime("%Y-%m-%d"),
+            now.strftime("%H:%M:%S"),
+        )
 
-        elif choice == "3":
-            print("\n--- Expenses ---")
-            for exp in user.session_expenses:
-                print(exp)
-
-        elif choice == "4":
-            print("\n--- Transaction History ---")
-            for t in user.get_transaction_history():
-                print(f"{t[0]} {t[1]} | {t[2]} ${t[3]} | {t[4]}")
-
-        elif choice == "5":
-            print("Total Expense:", user.total_expense())
-
-        elif choice == "0":
-            print("Exiting Expense Tracker...")
-            break
-
+        if user.new_expense(expense):
+            st.success(expense.process_payment())
+            user.save_expense_to_db(expense)
+            user.save_expenses()
         else:
-            print("Invalid choice. Please try again.")
+            st.error("Insufficient balance")
 
+elif menu == "Add Cash Expense":
+    st.subheader("Add Cash Expense")
 
-if __name__ == "__main__":
-    main()
+    amount = st.number_input("Amount", min_value=0.0, step=1.0)
+    category = st.text_input("Category")
+
+    if st.button("Add Cash Expense"):
+        now = datetime.now()
+        expense = CashExpense(
+            amount,
+            category,
+            now.strftime("%Y-%m-%d"),
+            now.strftime("%H:%M:%S"),
+        )
+
+        if user.new_expense(expense):
+            st.success(expense.process_payment())
+            user.save_expense_to_db(expense)
+            user.save_expenses()
+        else:
+            st.error("Insufficient balance")
+elif menu == "View Expenses":
+    st.subheader("Expenses")
+
+    if not user.session_expenses:
+        st.info("No expenses recorded yet.")
+    else:
+        for exp in user.session_expenses:
+            st.write(exp)
+
+elif menu == "Transaction History":
+    st.subheader("Transaction History")
+
+    history = user.get_transaction_history()
+
+    if not history:
+        st.info("No transactions found.")
+    else:
+        for t in history:
+            st.write(f"{t[0]} {t[1]} | {t[2]} ${t[3]} | {t[4]}")
+            
+elif menu == "Total Expense":
+    st.subheader("Total Expense")
+    st.metric("Total Spent", f"${user.total_expense()}")

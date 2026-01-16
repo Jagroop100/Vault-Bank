@@ -1,22 +1,23 @@
 # Expense Tracker
 
-A Python-based Expense Tracker application developed as an academic project.
-The project demonstrates core Python programming concepts including
-Object-Oriented Programming (OOP), Inheritance, Polymorphism, JSON serialization,
-SQLite database integration, and Python packaging.
+This is a Python-based Expense Tracker application that allows users to record and manage their expenses.  
+The application supports both card and cash expenses and provides a graphical user interface using Streamlit.
 
----
 
 ## Features
 
-- Object-Oriented Programming with multiple classes
-- Inheritance and polymorphism for different expense types (Card & Cash)
-- Modular design using Python packages and modules
-- JSON serialization for persistent storage of expense data
-- SQLite database for storing transaction history
-- Basic console-based user interface (menu-driven)
-- Virtual environment and requirements management
-- Packaged and published following PyPI standards
-- Version-controlled and published on GitHub
+- Add card expenses  
+- Add cash expenses  
+- View all expenses  
+- View transaction history  
+- View total expense  
+- Data persistence using SQLite  
+- Modular and object-oriented design  
 
----
+## Technologies Used
+
+- Python  
+- Streamlit  
+- SQLite  
+- Object-Oriented Programming  
+
